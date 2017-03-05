@@ -28,8 +28,7 @@ class Client(object):
         super(Client, self).__init__();
         self.apikey = apikey
 
-
-    # Gets the weather in general (cloudy, rain, etc) and the humidity
+    # Gets the weather in general (cloudy, rain) and the average humidity
     def hourly_weather(self, json_data):
 
         humidity = 0
@@ -52,7 +51,7 @@ class Client(object):
 
         return avWeather, humidityAv  
 
-    # Gets the lowest and highest Temperature of the day
+    # Gets the lowest and highest temperature of the day
     def almanac(self, json_data):
 
         hTemp = json_data["almanac"]["temp_high"]["normal"]["C"]
@@ -79,6 +78,7 @@ class Client(object):
         urlCond = str(self.url_base)+str(self.apikey) + \
             str(self.url_service["conditions"]) + str(self.location) + ".json"
 
+        # Gets the webs in json format
         r = requests.get(urlHourly)
         jsonHourly = json.loads(r.text)
 
@@ -88,6 +88,7 @@ class Client(object):
         r = requests.get(urlCond)
         jsonCond = json.loads(r.text)
 
+        # Gets the relevant information of the data 
         cond, humidity = self.hourly_weather(jsonHourly)
         hTemp, lTemp = self.almanac(jsonAlmanac)
         actualT, pressure = self.condition(jsonCond)
@@ -119,7 +120,7 @@ class Client(object):
             print "If it's not raining probably it will rain later, "+ \
                 "so grab an umbrella"
         else: 
-            print "Today will be an average day on your average life"+ \
+            print "Today will be an average day on your life"+ \
                 "don't worry about weather"
 
         print "\n"
